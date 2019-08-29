@@ -59,14 +59,14 @@ if __name__ == "__main__":
         print(result.registers)
         decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder='>', wordorder='>')
         decoded = {
-            '1': decoder.decode_16bit_uint(),
-            '2': decoder.skip_bytes(2),
-            '3': decoder.decode_32bit_int(),
-            '4': decoder.decode_32bit_float(),
-            '5': decoder.decode_32bit_float(),
-            '6': decoder.decode_16bit_int(),
-            '7': decoder.skip_bytes(1),
-            '8': decoder.decode_32bit_float(),
+            '2000': decoder.decode_16bit_uint(),
+            '2001': decoder.skip_bytes(2),
+            '2002': decoder.decode_32bit_int(),
+            '2004': decoder.decode_32bit_float(),
+            '2006': decoder.decode_32bit_float(),
+            '2008': decoder.decode_16bit_int(),
+            '2009': decoder.skip_bytes(2),
+            '2010': decoder.decode_32bit_uint(),
         }
 
         print("-" * 60)
@@ -74,8 +74,12 @@ if __name__ == "__main__":
         print("-" * 60)
         for name, value in decoded.items():
             print ("%s\t" % name, value)
+        print("\n")
 
         # Try to write registers 2000
+        print("-" * 60)
+        print("Writing Registers")
+        print("-" * 60)
 
         builder = BinaryPayloadBuilder(byteorder='>', wordorder='>')
         
@@ -83,15 +87,13 @@ if __name__ == "__main__":
         builder.add_16bit_uint(0) # Skip 1 byte        
         builder.add_32bit_int(-1234)
         builder.add_32bit_float(-1.234)
-        builder.add_32bit_float(10)
+        builder.add_32bit_float(54961.85)
         builder.add_16bit_int(-5678)
         builder.add_16bit_uint(0) # Skip 1 byte
-        builder.add_32bit_float(1)
+        builder.add_32bit_uint(1)
         
         payload = builder.to_registers()
-        print("-" * 60)
-        print("Writing Registers")
-        print("-" * 60)
+        print("\n")
         print(payload)
         print("\n")
         payload = builder.build()
